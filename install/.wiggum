@@ -1,5 +1,12 @@
+WIGGUM_PATH=wiggum-official
+# allows you to point to another location for Wiggum
+# wiggum-official will download Wiggum from GitHub
+# accepts a local path, eg: ./../wiggum-local/wiggum.sh
+# default value = wiggum-official
+
 VERSION_OVERRIDE=latest
 # allows you to pin your Wiggum compliance to a specific version
+# version overrides are ignored when using WIGGUM_PATH
 # accepts a version number, eg: 0001, 0202, 0011
 # default value = latest
 
