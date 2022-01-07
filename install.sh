@@ -29,7 +29,7 @@ then
   error "A .wiggum file already exists. Maybe you've already installed Wiggum?"
   exit 1
 fi
-curl -o .wiggum https://raw.githubusercontent.com/homes-com-au/wiggum/master/install/.wiggum
+curl -s -o .wiggum https://raw.githubusercontent.com/homes-com-au/wiggum/master/install/.wiggum
 
 # Copy over the bootstrap file
 if [ -f "wiggum.sh" ];
@@ -37,5 +37,5 @@ then
   error "A wiggum.sh file already exists. Maybe you've already installed Wiggum?"
   exit 1
 fi
-curl -o wiggum.sh https://raw.githubusercontent.com/homes-com-au/wiggum/master/install/wiggum.sh
+curl -s -o wiggum.sh https://raw.githubusercontent.com/homes-com-au/wiggum/master/install/wiggum.sh
 chmod +x wiggum.sh
