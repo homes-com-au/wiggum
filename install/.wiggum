@@ -1,6 +1,6 @@
 VERSION_OVERRIDE=latest
 # allows you to pin your Wiggum compliance to a specific version
-# accepts a version number, eg: 1.0, 2.0, 2.1
+# accepts a version number, eg: 1, 2, 11
 # default value = latest
 
 CHECK_README=true
