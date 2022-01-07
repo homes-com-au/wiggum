@@ -38,3 +38,4 @@ then
   exit 1
 fi
 curl -o wiggum.sh https://raw.githubusercontent.com/homes-com-au/wiggum/master/install/wiggum.sh
+chmod +x wiggum.sh
