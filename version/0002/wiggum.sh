@@ -23,61 +23,99 @@ else
   echo "Skipping README check"
 fi
 
-FILES_SHOULD_EXIST=( README.md ./Dockerfile ./docker-compose.yml .dockerignore ./.buildkite/pipeline.yml )
-for i in "${FILES_SHOULD_EXIST[@]}"
-do
-  if [ ! -f "$i" ];
+# Check that Docker files are present with preferred naming convention
+if [[ -z "${CHECK_DOCKER}" ]] || [[ "${CHECK_DOCKER}" == "true" ]];
+then
+  DOCKER_SHOULD_EXIST=( ./Dockerfile ./docker-compose.yml .dockerignore  )
+  for i in "${DOCKER_SHOULD_EXIST[@]}"
+  do
+    if [ ! -f "$i" ];
+    then
+      COLLECTED_ERRORS+=("Docker file $i does not exist")
+    fi
+  done
+
+  # Check that Dockerfiles are alpha sorted
+  if [ "$(ls *-Dockerfile 2> /dev/null | wc -l)" -ge "1" ];
   then
-    COLLECTED_ERRORS+=("File $i does not exist")
+    COLLECTED_ERRORS+=("Dockerfile naming convention should be 'Dockerfile', 'Dockerfile.<env>' or 'Dockerfile-<env>'")
   fi
-done
 
-# Check that certain directories exist
-DIRS_SHOULD_EXIST=( ./terraform ./.buildkite )
-for i in "${DIRS_SHOULD_EXIST[@]}"
-do
-  if [ ! -d "$i" ];
+  # Check that there's a 'test' service in Docker Compose
+  if [ "$(grep -c '^  test:' ./docker-compose.yml)" -eq "0" ];
   then
-    COLLECTED_ERRORS+=("Directory $i does not exist")
+    COLLECTED_ERRORS+=("'test:' service not found in docker-compose.yml")
   fi
-done
 
-
-# Check that Dockerfiles are alpha sorted
-if [ "$(ls *-Dockerfile 2> /dev/null | wc -l)" -ge "1" ];
-then
-  COLLECTED_ERRORS+=("Dockerfile naming convention should be 'Dockerfile' or 'Dockerfile-<env>'")
+  # Check that there's a .git entry in .dockerignore
+  if [ "$(grep -c '.git' ./.dockerignore)" -eq "0" ];
+  then
+    COLLECTED_ERRORS+=("'.git' not found in ./.dockerignore")
+  fi
+else
+  echo "Skipping Dockerfile check"
 fi
 
-# Check that there's a 'test' service in Docker Compose
-if [ "$(grep -c '^  test:' ./docker-compose.yml)" -eq "0" ];
+# Check that Buildkite is present
+if [[ -z "${CHECK_BUILDKITE}" ]] || [[ "${CHECK_BUILDKITE}" == "true" ]];
 then
-  COLLECTED_ERRORS+=("'test:' service not found in docker-compose.yml")
+  BUILDKITE_DIR_SHOULD_EXIST=( ./.buildkite )
+  for i in "${BUILDKITE_DIR_SHOULD_EXIST[@]}"
+  do
+    if [ ! -d "$i" ];
+    then
+      COLLECTED_ERRORS+=("Buildkite directory $i does not exist")
+    fi
+  done
+  BUILDKITE_SHOULD_EXIST=( ./.buildkite/pipeline.yml )
+  for i in "${BUILDKITE_SHOULD_EXIST[@]}"
+  do
+    if [ ! -f "$i" ];
+    then
+      COLLECTED_ERRORS+=("Buildkite file $i does not exist")
+    fi
+  done
+
+  # Check that there's a 'test' step in BuildKite
+  if [ "$(grep -c "^    key: 'test'" ./.buildkite/pipeline.yml)" -eq "0" ];
+  then
+    COLLECTED_ERRORS+=("Key marked 'test' not found in ./.buildkite/pipeline.yml")
+  fi
+
+  # Check that Wiggum runs in Buildkite pipeline
+  if [ "$(grep -c "wiggum.sh" ./.buildkite/pipeline.yml)" -eq "0" ];
+  then
+    COLLECTED_ERRORS+=("Wiggum not found in ./.buildkite/pipeline.yml")
+  fi
+else
+  echo "Skipping Buildkite check"
 fi
 
-# Check that there's a 'test' step in BuildKite
-if [ "$(grep -c "^    key: 'test'" ./.buildkite/pipeline.yml)" -eq "0" ];
+# Check that Terraform is present
+if [[ -z "${CHECK_TERRAFORM}" ]] || [[ "${CHECK_TERRAFORM}" == "true" ]];
 then
-  COLLECTED_ERRORS+=("Key marked 'test' not found in ./.buildkite/pipeline.yml")
+  TERRAFORM_SHOULD_EXIST=( ./terraform )
+  for i in "${TERRAFORM_SHOULD_EXIST[@]}"
+  do
+    if [ ! -d "$i" ];
+    then
+      COLLECTED_ERRORS+=("Terraform directory $i does not exist")
+    fi
+  done
+
+  # Check that the terraform plugin is not being used in Buildkite pipeline
+  if [[ -z "${CHECK_BUILDKITE}" ]] || [[ "${CHECK_BUILDKITE}" == "true" ]];
+  then
+    if [ "$(grep -c 'echoboomer/terraform' ./.buildkite/pipeline.yml)" -eq "1" ];
+    then
+      COLLECTED_ERRORS+=("echoboomer/terraform plugin found in Buildkite pipeline which is known to be out of date, please use a Dockerfile.terraform instead")
+    fi
+  fi
+else
+  echo "Skipping Terraform check"
 fi
 
-# Check that Wiggum runs in Buildkite pipeline
-if [ "$(grep -c "wiggum.sh" ./.buildkite/pipeline.yml)" -eq "0" ];
-then
-  COLLECTED_ERRORS+=("Wiggum not found in ./.buildkite/pipeline.yml")
-fi
 
-# Check that there's a .git entry in .dockerignore
-if [ "$(grep -c '.git' ./.dockerignore)" -eq "0" ];
-then
-  COLLECTED_ERRORS+=("'.git' not found in ./.dockerignore")
-fi
-
-# Check that the terraform plugin is not being used in Buildkite pipeline
-if [ "$(grep -c 'echoboomer/terraform' ./.buildkite/pipeline.yml)" -eq "1" ];
-then
-  COLLECTED_ERRORS+=("echoboomer/terraform plugin found in Buildkite pipeline, please use a Dockerfile.terraform instead")
-fi
 
 # ---
 # Print collected errors and exit with non-zero status
