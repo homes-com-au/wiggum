@@ -16,7 +16,8 @@ A simple DevOps and consistency linter.
 The install script will add the following to your code repository:
 
 * A configuration file at `./.wiggum`
-* Add a step at the top of your Buildkite pipeline `./.buildkite/pipeline.yml` to run Wiggum
+* A Wiggum bootstrap file at `./wiggum.sh` that you will need to run to execute Wiggum
+* Future (please add manually for now): Add a step at the top of your Buildkite pipeline `./.buildkite/pipeline.yml` to run Wiggum
 
 ### Running Wiggum
 
