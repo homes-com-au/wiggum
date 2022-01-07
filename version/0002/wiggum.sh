@@ -15,9 +15,9 @@ source .wiggum
 # Check that a README file exists
 if [[ -z "${CHECK_README}" ]] || [[ "${CHECK_README}" == "true" ]];
 then
-  if [[ ! -f "README.md" ]] || [[ ! -f "README.txt" ]] || [[ ! -f "README" ]];
+  if [[ ! -f "README.md" ]] && [[ ! -f "README.txt" ]] && [[ ! -f "README" ]];
   then
-    COLLECTED_ERRORS+=("README $i does not exist")
+    COLLECTED_ERRORS+=("README does not exist")
   fi
 else
   echo "Skipping README check"
