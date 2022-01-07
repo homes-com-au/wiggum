@@ -26,36 +26,7 @@ The install script will add the following to your code repository:
 
 The Wiggum installation script will create Wiggum's configuration file which is expected to be found at `.wiggum`. If no configuration file is found or configuration flags are missing, Wiggum will run with default values.
 
-Wiggum currently respects the following flags:
-
-    VERSION_OVERRIDE=latest
-    # allows you to pin your Wiggum compliance to a specific version
-    # accepts a version number, eg: 1.0, 2.0, 2.1
-    # default value = latest
-
-    CHECK_README=true
-    # accepts boolean values: true|false
-    # default value = true
-
-    CHECK_DOCKER=true
-    # accepts boolean values: true|false
-    # default value = true
-
-    CHECK_TERRAFORM=true
-    # accepts boolean values: true|false
-    # default value = true
-
-    CHECK_BUILDKITE=true
-    # accepts boolean values: true|false
-    # default value = true
-
-    CHECK_TESTS=true
-    # accepts boolean values: true|false
-    # default value = true
-
-    CHECK_DEPENDENCIES=true
-    # accepts boolean values: true|false
-    # default value = true
+Please see the `install/.wiggum` file for example configuration flags with further documentation.
 
 ## Versioning
 
@@ -65,9 +36,9 @@ If you update the `latest` Wiggum version, all repositories where Wiggum is inst
 
 To pin a repository to a specific Wiggum version, use the VERSION_OVERRIDE configuration option.
 
-To create a new version (this example creates a v2 from v1, update the version numbers to suit your needs):
+To create a new version (this example creates a v0002 from v0001, update the version numbers to suit your needs):
 
-    $ cp -r version/1 version/2
+    $ cp -r version/0001 version/0002
     $ rm version/latest
-    $ cd version && ln -s 2 latest && cd ..
+    $ cd version && ln -s 0002 latest && cd ..
 
