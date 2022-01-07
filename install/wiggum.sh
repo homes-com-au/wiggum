@@ -9,7 +9,7 @@ set -e
 
 source .wiggum
 
-if [ -z "${VERSION_OVERRIDE}" ] || ["${VERSION_OVERRIDE}" == "latest" ];
+if [[ -z "${VERSION_OVERRIDE}" ]] || [[ "${VERSION_OVERRIDE}" == "latest" ]];
 then
   echo "Checking latest version of Wiggum..."
   WIGGUM_VERSION=`curl -fsSL https://raw.githubusercontent.com/homes-com-au/wiggum/master/version/latest`
