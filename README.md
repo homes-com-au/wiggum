@@ -17,7 +17,16 @@ The install script will add the following to your code repository:
 
 * A configuration file at `./.wiggum`
 * A Wiggum bootstrap file at `./wiggum.sh` that you will need to run to execute Wiggum
-* Future (please add manually for now): Add a step at the top of your Buildkite pipeline `./.buildkite/pipeline.yml` to run Wiggum
+
+Once the installation has completed you can decide on how you'd like to run Wiggum. Some ideas are:
+
+* Run it as a pre-commit Git hook
+* Add it to your CI pipeline
+* Run it manually as needed
+
+or do all three!
+
+At Homes.com.au we're running it by adding a "soft fail" step in our Buildkite pipeline, with notifications going to our engineering Slack channel. This means that builds will still pass overall if Wiggum fails, but we will be alerted when it does so that we can action fixes.
 
 ### Running Wiggum
 
