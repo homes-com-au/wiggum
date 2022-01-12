@@ -28,6 +28,35 @@ or do all three!
 
 At Homes.com.au we're running it by adding a "soft fail" step in our Buildkite pipeline, with notifications going to our engineering Slack channel. This means that builds will still pass overall if Wiggum fails, but we will be alerted when it does so that we can action fixes.
 
+#### Buildkite Pipeline Example
+
+    steps:
+      - label: ':lint-roller: Wiggum checks'
+        key: 'wiggum'
+        depends_on: ~
+        agents:
+          queue: 'ci'
+        command: "./wiggum.sh"
+        soft_fail:
+          - exit_status: 1
+
+      - depends_on: 'wiggum'
+        command: |
+          if [ $(buildkite-agent step get "outcome" --step "wiggum") == "soft_failed" ]; then
+          cat <<- YAML | buildkite-agent pipeline upload
+          steps:
+            - label: ":red_circle: Wiggum check failed!"
+              command: "exit 1"
+              soft_fail:
+                - exit_status: 1
+              notify:
+                - slack:
+                    channels: 
+                      - "#team-dev"
+                    message: "Wiggum check has failed for ${BUILDKITE_PIPELINE_NAME}. Last commit from ${BUILDKITE_BUILD_AUTHOR}. Results available here ${BUILDKITE_BUILD_URL}."
+          YAML
+          fi
+
 ### Running Wiggum
 
     $ ./wiggum.sh
