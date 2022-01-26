@@ -24,7 +24,7 @@ then
   INFRA_DIR="${REPO_DIR}/.infra"
   if [ ! -d "${INFRA_DIR}" ];
   then 
-        COLLECTED_ERRORS+=("USE_DOT_INFRA set but ${INFRA_DIR} does not exist")
+    COLLECTED_ERRORS+=("USE_DOT_INFRA set but ${INFRA_DIR} does not exist")
   fi
 fi
 
