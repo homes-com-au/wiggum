@@ -10,6 +10,11 @@ VERSION_OVERRIDE=latest
 # accepts a version number, eg: 0001, 0202, 0011
 # default value = latest
 
+USE_DOT_INFRA=true
+# use the ./infra directory for docker, buildkite and terraform files
+# accepts boolean values: true|false
+# default value = false
+
 CHECK_README=true
 # accepts boolean values: true|false
 # default value = true
