@@ -14,18 +14,10 @@ source .wiggum
 
 # root directory of the repository
 REPO_DIR="."
-# diretory for infrastructure releated files. 
+# RELATIVE_PATH is the path to the infrastructure releated files. 
 # default is the $REPO_DIR
-INFRA_DIR=$REPO_DIR
-
-# use the .infra directory layout for all infrastructure files/config
-if [[ -n "${USE_DOT_INFRA}" ]] && [[ "${USE_DOT_INFRA}" == "true" ]];
-then
-  INFRA_DIR="${REPO_DIR}/.infra"
-  if [ ! -d "${INFRA_DIR}" ];
-  then 
-    COLLECTED_ERRORS+=("USE_DOT_INFRA set but ${INFRA_DIR} does not exist")
-  fi
+if [ -z "${RELATIVE_PATH}" ]; then
+  RELATIVE_PATH=$REPO_DIR
 fi
 
 # Check that a README file exists
@@ -42,7 +34,7 @@ fi
 # Check that Docker files are present with preferred naming convention
 if [[ -z "${CHECK_DOCKER}" ]] || [[ "${CHECK_DOCKER}" == "true" ]];
 then
-  DOCKER_SHOULD_EXIST=( ${INFRA_DIR}/Dockerfile ${INFRA_DIR}/docker-compose.yml ${INFRA_DIR}/.dockerignore  )
+  DOCKER_SHOULD_EXIST=( ${RELATIVE_PATH}/Dockerfile ${RELATIVE_PATH}/docker-compose.yml ${RELATIVE_PATH}/.dockerignore  )
   for i in "${DOCKER_SHOULD_EXIST[@]}"
   do
     if [ ! -f "$i" ];
@@ -52,19 +44,19 @@ then
   done
 
   # Check that Dockerfiles are alpha sorted
-  if [ "$(ls ${INFRA_DIR}/*-Dockerfile 2> /dev/null | wc -l)" -ge "1" ];
+  if [ "$(ls ${RELATIVE_PATH}/*-Dockerfile 2> /dev/null | wc -l)" -ge "1" ];
   then
     COLLECTED_ERRORS+=("Dockerfile naming convention should be 'Dockerfile', 'Dockerfile.<env>' or 'Dockerfile-<env>'")
   fi
 
   # Check that there's a 'test' service in Docker Compose
-  if [ "$(grep -c '^  test:' ${INFRA_DIR}/docker-compose.yml)" -eq "0" ];
+  if [ "$(grep -c '^  test:' ${RELATIVE_PATH}/docker-compose.yml)" -eq "0" ];
   then
     COLLECTED_ERRORS+=("'test:' service not found in docker-compose.yml")
   fi
 
   # Check that there's a .git entry in .dockerignore
-  if [ "$(grep -c '.git' ${INFRA_DIR}/.dockerignore)" -eq "0" ];
+  if [ "$(grep -c '.git' ${RELATIVE_PATH}/.dockerignore)" -eq "0" ];
   then
     COLLECTED_ERRORS+=("'.git' not found in ./.dockerignore")
   fi
@@ -72,18 +64,15 @@ else
   echo "Skipping Dockerfile check"
 fi
 
-# set buildkite config path
-BUILDKITE_DIR="./.buildkite"
-BUILDKITE_FILE="pipeline.yml"
-if [[ -n "${USE_DOT_INFRA}" ]] && [[ "${USE_DOT_INFRA}" == "true" ]];
-then
-  BUILDKITE_DIR=$INFRA_DIR
-  BUILDKITE_FILE=buildkite.yml
-fi
+
 
 # Check that Buildkite is present
 if [[ -z "${CHECK_BUILDKITE}" ]] || [[ "${CHECK_BUILDKITE}" == "true" ]];
 then
+  # set buildkite config path
+  BUILDKITE_DIR="${RELATIVE_PATH}/.buildkite"
+  BUILDKITE_FILE="pipeline.yml"
+
   BUILDKITE_DIR_SHOULD_EXIST=( ${BUILDKITE_DIR} )
   for i in "${BUILDKITE_DIR_SHOULD_EXIST[@]}"
   do
@@ -119,7 +108,7 @@ fi
 # Check that Terraform is present
 if [[ -z "${CHECK_TERRAFORM}" ]] || [[ "${CHECK_TERRAFORM}" == "true" ]];
 then
-  TERRAFORM_SHOULD_EXIST=( ${INFRA_DIR}/terraform )
+  TERRAFORM_SHOULD_EXIST=( ${RELATIVE_PATH}/terraform )
   for i in "${TERRAFORM_SHOULD_EXIST[@]}"
   do
     if [ ! -d "$i" ];
