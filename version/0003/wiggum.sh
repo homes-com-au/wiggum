@@ -91,7 +91,7 @@ then
   done
 
   # Check that there's a 'test' step in BuildKite
-  if [ "$(grep -c "^    key: 'test'" ${BUILDKITE_DIR}/${BUILDKITE_FILE})" -eq "0" ];
+  if [ "$(grep -c "^    key: [\"']test[\"']" ${BUILDKITE_DIR}/${BUILDKITE_FILE})" -eq "0" ];
   then
     COLLECTED_ERRORS+=("Key marked 'test' not found in ${BUILDKITE_DIR}/${BUILDKITE_FILE}")
   fi
