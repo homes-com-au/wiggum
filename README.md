@@ -11,7 +11,7 @@ A simple DevOps and consistency linter.
 
 ### Installing into an existing code repository
 
-    $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/homes-com-au/wiggum/master/install.sh)"
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/homes-com-au/wiggum/master/install.sh)"
 
 The install script will add the following to your code repository:
 
