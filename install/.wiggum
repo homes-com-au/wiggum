@@ -10,6 +10,11 @@ VERSION_OVERRIDE=latest
 # accepts a version number, eg: 0001, 0202, 0011
 # default value = latest
 
+# RELATIVE_PATH=.
+# set the relative path to the infrastructure files eg. docker, buildkite and terraform 
+# accepts string path with no trailing /, eg: . or ./.infra
+# default value = "."
+
 CHECK_README=true
 # accepts boolean values: true|false
 # default value = true
