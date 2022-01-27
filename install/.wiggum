@@ -11,7 +11,7 @@ VERSION_OVERRIDE=latest
 # default value = latest
 
 # RELATIVE_PATH=.
-# set the relative 
+# set the relative path to the infrastructure files eg. docker, buildkite and terraform 
 # accepts string path with no trailing /, eg: . or ./.infra
 # default value = "."
 
