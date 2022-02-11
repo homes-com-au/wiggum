@@ -32,7 +32,7 @@ done
 
 
 # Check that Dockerfiles are alpha sorted
-if [ "$(ls *-Dockerfile 2> /dev/null | wc -l)" -ge "1" ];
+if [ "$(find . -type f -name "*-Dockerfile" 2> /dev/null | wc -l)" -ge "1" ];
 then
   COLLECTED_ERRORS+=("Dockerfile naming convention should be 'Dockerfile' or 'Dockerfile-<env>'")
 fi

@@ -10,6 +10,7 @@ set -e
 echo "Wiggum is running..."
 COLLECTED_ERRORS=()
 
+# shellcheck disable=SC1091
 source .wiggum
 
 # root directory of the repository
@@ -34,7 +35,7 @@ fi
 # Check that Docker files are present with preferred naming convention
 if [[ -z "${CHECK_DOCKER}" ]] || [[ "${CHECK_DOCKER}" == "true" ]];
 then
-  DOCKER_SHOULD_EXIST=( ${RELATIVE_PATH}/Dockerfile ${RELATIVE_PATH}/docker-compose.yml ${RELATIVE_PATH}/.dockerignore  )
+  DOCKER_SHOULD_EXIST=( "${RELATIVE_PATH}/Dockerfile" "${RELATIVE_PATH}/docker-compose.yml" "${RELATIVE_PATH}/.dockerignore" )
   for i in "${DOCKER_SHOULD_EXIST[@]}"
   do
     if [ ! -f "$i" ];
@@ -44,7 +45,7 @@ then
   done
 
   # Check that Dockerfiles are alpha sorted
-  if [ "$(ls ${RELATIVE_PATH}/*-Dockerfile 2> /dev/null | wc -l)" -ge "1" ];
+  if [ "$(find . -type f -name "${RELATIVE_PATH}/*-Dockerfile" 2> /dev/null | wc -l)" -ge "1" ];
   then
     COLLECTED_ERRORS+=("Dockerfile naming convention should be 'Dockerfile', 'Dockerfile.<env>' or 'Dockerfile-<env>'")
   fi
@@ -76,7 +77,7 @@ then
   BUILDKITE_DIR="${RELATIVE_PATH}/.buildkite"
   BUILDKITE_FILE="pipeline.yml"
 
-  BUILDKITE_DIR_SHOULD_EXIST=( ${BUILDKITE_DIR} )
+  BUILDKITE_DIR_SHOULD_EXIST=( "${BUILDKITE_DIR}" )
   for i in "${BUILDKITE_DIR_SHOULD_EXIST[@]}"
   do
     if [ ! -d "$i" ];
@@ -84,7 +85,7 @@ then
       COLLECTED_ERRORS+=("Buildkite directory $i does not exist")
     fi
   done
-  BUILDKITE_SHOULD_EXIST=( ${BUILDKITE_DIR}/${BUILDKITE_FILE} )
+  BUILDKITE_SHOULD_EXIST=( "${BUILDKITE_DIR}/${BUILDKITE_FILE}" )
   for i in "${BUILDKITE_SHOULD_EXIST[@]}"
   do
     if [ ! -f "$i" ];
@@ -114,7 +115,7 @@ fi
 # Check that Terraform is present
 if [[ -z "${CHECK_TERRAFORM}" ]] || [[ "${CHECK_TERRAFORM}" == "true" ]];
 then
-  TERRAFORM_SHOULD_EXIST=( ${RELATIVE_PATH}/terraform )
+  TERRAFORM_SHOULD_EXIST=( "${RELATIVE_PATH}/terraform" )
   for i in "${TERRAFORM_SHOULD_EXIST[@]}"
   do
     if [ ! -d "$i" ];
