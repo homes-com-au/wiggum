@@ -4,8 +4,8 @@ A simple DevOps and consistency linter.
 
 ## Requirements
 
-* `bash`
-* `curl`
+- `bash`
+- `curl`
 
 ## Usage
 
@@ -17,14 +17,14 @@ A simple DevOps and consistency linter.
 
 The install script will add the following to your code repository:
 
-* A configuration file at `./.wiggum`
-* A Wiggum bootstrap file at `./wiggum.sh` that you will need to run to execute Wiggum
+- A configuration file at `./.wiggum`
+- A Wiggum bootstrap file at `./wiggum.sh` that you will need to run to execute Wiggum
 
 Once the installation has completed you can decide on how you'd like to run Wiggum. Some ideas are:
 
-* Run it as a pre-commit Git hook
-* Add it to your CI pipeline
-* Run it manually as needed
+- Run it as a pre-commit Git hook
+- Add it to your CI pipeline
+- Run it manually as needed
 
 or do all three!
 
@@ -36,9 +36,6 @@ At Homes.com.au we're running it by adding a "soft fail" step in our Buildkite p
 steps:
   - label: ":lint-roller: Wiggum checks"
     key: "wiggum"
-    depends_on: ~
-    agents:
-      queue: "ci"
     command: "./wiggum.sh"
     soft_fail:
       - exit_status: 1
