@@ -2,6 +2,19 @@
 
 A simple DevOps and consistency linter.
 
+If you have many microservices, you may have a problem with consistency. 
+At Homes.com.au, we found that we had many code repositories created over time
+with varying levels of consistency across them. This meant additional
+cognitive overhead for engineers as they moved across projects.
+
+We created Wiggum as a way to help. It's a simple bash script that will run
+a series of checks on your code repository to make sure that it conforms
+to a set of standards that you decide are important as a team.
+
+We've been running it as a regular part of our stack for around 12 months
+and we hardly notice it's there. This is good! It means that we're a
+lot more consistent across code repositories than we were 12 months ago!
+
 ## Requirements
 
 - `bash`
